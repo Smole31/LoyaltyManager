@@ -32,108 +32,176 @@ namespace LoyaltyManager
         private void InitializeComponent1()
         {
             this.Text = "Система лояльності";
-            this.Size = new Size(1000, 700);
+            this.Size = new Size(1200, 800);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.BackColor = Color.FromArgb(236, 240, 241);
+            this.BackColor = Color.FromArgb(240, 244, 248);
+            this.MinimumSize = new Size(1000, 700);
 
+            // Верхня панель
             var topPanel = new Panel
             {
                 Dock = DockStyle.Top,
-                Height = 80,
+                Height = 100,
                 BackColor = Color.FromArgb(41, 128, 185)
+            };
+
+            // Іконка користувача
+            var userIcon = new Label
+            {
+                Text = "👤",
+                Font = new Font("Segoe UI", 28),
+                Location = new Point(20, 25),
+                Size = new Size(50, 50),
+                ForeColor = Color.White
             };
 
             lblUserName = new Label
             {
-                Text = $"Користувач: {currentUser.FullName}",
-                Location = new Point(20, 15),
+                Text = currentUser.FullName,
+                Location = new Point(80, 25),
                 AutoSize = true,
-                Font = new Font("Segoe UI", 14, FontStyle.Bold),
+                Font = new Font("Segoe UI", 16, FontStyle.Bold),
                 ForeColor = Color.White
             };
 
             lblUserPoints = new Label
             {
-                Text = $"Бали: {currentUser.Points}",
-                Location = new Point(20, 45),
+                Text = $"⭐ {currentUser.Points} балів",
+                Location = new Point(80, 55),
                 AutoSize = true,
-                Font = new Font("Segoe UI", 12),
-                ForeColor = Color.White
+                Font = new Font("Segoe UI", 14),
+                ForeColor = Color.FromArgb(255, 235, 59)
             };
 
             var btnLogout = new Button
             {
-                Text = "Вийти",
-                Location = new Point(850, 20),
-                Size = new Size(120, 40),
+                Text = "🚪 Вийти",
+                Location = new Point(1050, 30),
+                Size = new Size(120, 45),
                 BackColor = Color.FromArgb(231, 76, 60),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                Cursor = Cursors.Hand
             };
             btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatAppearance.MouseOverBackColor = Color.FromArgb(192, 57, 43);
             btnLogout.Click += (s, e) => {
                 this.Close();
                 Application.Restart();
             };
 
-            topPanel.Controls.AddRange(new Control[] { lblUserName, lblUserPoints, btnLogout });
+            topPanel.Controls.AddRange(new Control[] { userIcon, lblUserName, lblUserPoints, btnLogout });
+
+            // Панель продуктів
+            var productsPanel = new Panel
+            {
+                Location = new Point(20, 120),
+                Size = new Size(1150, 320),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.FixedSingle
+            };
 
             var lblProducts = new Label
             {
-                Text = "Доступні продукти",
-                Location = new Point(20, 100),
+                Text = "🛒 Доступні продукти",
+                Location = new Point(15, 10),
                 AutoSize = true,
-                Font = new Font("Segoe UI", 14, FontStyle.Bold)
+                Font = new Font("Segoe UI", 16, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
             };
 
             dgvProducts = new DataGridView
             {
-                Location = new Point(20, 140),
-                Size = new Size(940, 250),
+                Location = new Point(15, 50),
+                Size = new Size(1120, 210),
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 AllowUserToAddRows = false,
                 ReadOnly = true,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                BackgroundColor = Color.White
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.None,
+                RowHeadersVisible = false,
+                EnableHeadersVisualStyles = false,
+                MultiSelect = false
             };
+
+            // Стилі для заголовків
+            dgvProducts.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(52, 152, 219);
+            dgvProducts.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvProducts.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgvProducts.ColumnHeadersDefaultCellStyle.Padding = new Padding(5);
+            dgvProducts.ColumnHeadersHeight = 40;
+
+            // Стилі для рядків
+            dgvProducts.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dgvProducts.DefaultCellStyle.Padding = new Padding(5);
+            dgvProducts.RowTemplate.Height = 35;
+            dgvProducts.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 246, 250);
 
             var btnBuy = new Button
             {
-                Text = "Купити товар",
-                Location = new Point(20, 400),
-                Size = new Size(150, 40),
+                Text = "💳 КУПИТИ ОБРАНИЙ ТОВАР",
+                Location = new Point(15, 270),
+                Size = new Size(250, 45),
                 BackColor = Color.FromArgb(46, 204, 113),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold)
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Cursor = Cursors.Hand
             };
             btnBuy.FlatAppearance.BorderSize = 0;
+            btnBuy.FlatAppearance.MouseOverBackColor = Color.FromArgb(39, 174, 96);
             btnBuy.Click += BtnBuy_Click;
+
+            productsPanel.Controls.AddRange(new Control[] { lblProducts, dgvProducts, btnBuy });
+
+            // Панель історії
+            var historyPanel = new Panel
+            {
+                Location = new Point(20, 460),
+                Size = new Size(1150, 280),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.FixedSingle
+            };
 
             var lblHistory = new Label
             {
-                Text = "Історія покупок",
-                Location = new Point(20, 460),
+                Text = "📋 Історія покупок",
+                Location = new Point(15, 10),
                 AutoSize = true,
-                Font = new Font("Segoe UI", 14, FontStyle.Bold)
+                Font = new Font("Segoe UI", 16, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
             };
 
             dgvPurchases = new DataGridView
             {
-                Location = new Point(20, 500),
-                Size = new Size(940, 140),
+                Location = new Point(15, 50),
+                Size = new Size(1120, 215),
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 AllowUserToAddRows = false,
                 ReadOnly = true,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                BackgroundColor = Color.White
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.None,
+                RowHeadersVisible = false,
+                EnableHeadersVisualStyles = false
             };
 
-            this.Controls.AddRange(new Control[] {
-                topPanel, lblProducts, dgvProducts, btnBuy,
-                lblHistory, dgvPurchases
-            });
+            dgvPurchases.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(155, 89, 182);
+            dgvPurchases.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvPurchases.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgvPurchases.ColumnHeadersDefaultCellStyle.Padding = new Padding(5);
+            dgvPurchases.ColumnHeadersHeight = 40;
+
+            dgvPurchases.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dgvPurchases.DefaultCellStyle.Padding = new Padding(5);
+            dgvPurchases.RowTemplate.Height = 35;
+            dgvPurchases.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 246, 250);
+
+            historyPanel.Controls.AddRange(new Control[] { lblHistory, dgvPurchases });
+
+            this.Controls.AddRange(new Control[] { topPanel, productsPanel, historyPanel });
         }
 
         private void LoadData()
@@ -152,10 +220,10 @@ namespace LoyaltyManager
                 cmd.CommandText = @"
                     SELECT 
                         product_id AS 'ID',
-                        product_name AS 'Назва',
-                        price AS 'Ціна',
-                        points_per_unit AS 'Бали',
-                        stock_quantity AS 'Залишок'
+                        product_name AS '📦 Назва',
+                        printf('%.2f', price) AS '💰 Ціна (грн)',
+                        points_per_unit AS '⭐ Бали',
+                        stock_quantity AS '📊 Залишок'
                     FROM products
                     ORDER BY product_name";
 
@@ -178,11 +246,11 @@ namespace LoyaltyManager
                 var cmd = connection.CreateCommand();
                 cmd.CommandText = @"
                     SELECT 
-                        p.product_name AS 'Товар',
-                        pu.quantity AS 'Кількість',
-                        pu.total_price AS 'Сума',
-                        pu.points_earned AS 'Бали',
-                        datetime(pu.purchase_date) AS 'Дата'
+                        p.product_name AS '📦 Товар',
+                        pu.quantity AS '🔢 Кількість',
+                        printf('%.2f', pu.total_price) AS '💰 Сума (грн)',
+                        pu.points_earned AS '⭐ Бали',
+                        strftime('%d.%m.%Y %H:%M', pu.purchase_date) AS '📅 Дата'
                     FROM purchases pu
                     JOIN products p ON pu.product_id = p.product_id
                     WHERE pu.user_id = @userId
@@ -202,30 +270,31 @@ namespace LoyaltyManager
         private void UpdateUserPoints()
         {
             currentUser.Points = DatabaseHelper.GetUserPoints(currentUser.UserId);
-            lblUserPoints.Text = $"Бали: {currentUser.Points}";
+            lblUserPoints.Text = $"⭐ {currentUser.Points} балів";
         }
 
         private void BtnBuy_Click(object? sender, EventArgs e)
         {
             if (dgvProducts.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Оберіть товар!", "Увага",
+                MessageBox.Show("❌ Оберіть товар для покупки!", "Увага",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             var row = dgvProducts.SelectedRows[0];
             int productId = Convert.ToInt32(row.Cells["ID"].Value);
-            string productName = row.Cells["Назва"].Value?.ToString() ?? "";
-            decimal price = Convert.ToDecimal(row.Cells["Ціна"].Value);
-            int pointsPerUnit = Convert.ToInt32(row.Cells["Бали"].Value);
+            string productName = row.Cells["📦 Назва"].Value?.ToString() ?? "";
+            string priceStr = row.Cells["💰 Ціна (грн)"].Value?.ToString() ?? "0";
+            decimal price = decimal.Parse(priceStr);
+            int pointsPerUnit = Convert.ToInt32(row.Cells["⭐ Бали"].Value);
 
             string input = PromptForQuantity();
             if (string.IsNullOrEmpty(input)) return;
 
             if (!int.TryParse(input, out int quantity) || quantity <= 0)
             {
-                MessageBox.Show("Введіть число!", "Помилка",
+                MessageBox.Show("❌ Введіть коректну кількість!", "Помилка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -234,8 +303,12 @@ namespace LoyaltyManager
             int pointsEarned = pointsPerUnit * quantity;
 
             var result = MessageBox.Show(
-                $"Товар: {productName}\nКількість: {quantity}\nСума: {totalPrice:F2} грн\nБали: +{pointsEarned}\n\nПідтвердити?",
-                "Підтвердження",
+                $"🛒 Товар: {productName}\n" +
+                $"🔢 Кількість: {quantity}\n" +
+                $"💰 Сума: {totalPrice:F2} грн\n" +
+                $"⭐ Бали: +{pointsEarned}\n\n" +
+                $"✅ Підтвердити покупку?",
+                "Підтвердження покупки",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
@@ -249,18 +322,51 @@ namespace LoyaltyManager
         {
             Form prompt = new Form()
             {
-                Width = 300,
-                Height = 150,
+                Width = 350,
+                Height = 180,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
-                Text = "Кількість",
+                Text = "Кількість товару",
                 StartPosition = FormStartPosition.CenterParent,
                 MaximizeBox = false,
-                MinimizeBox = false
+                MinimizeBox = false,
+                BackColor = Color.White
             };
 
-            Label textLabel = new Label() { Left = 20, Top = 20, Text = "Скільки купити?", AutoSize = true };
-            TextBox textBox = new TextBox() { Left = 20, Top = 50, Width = 240, Text = "1" };
-            Button confirmation = new Button() { Text = "OK", Left = 100, Width = 80, Top = 80, DialogResult = DialogResult.OK };
+            Label textLabel = new Label()
+            {
+                Left = 30,
+                Top = 30,
+                Text = "🔢 Скільки одиниць купити?",
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                AutoSize = true,
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
+            TextBox textBox = new TextBox()
+            {
+                Left = 30,
+                Top = 65,
+                Width = 280,
+                Text = "1",
+                Font = new Font("Segoe UI", 14),
+                TextAlign = HorizontalAlignment.Center
+            };
+
+            Button confirmation = new Button()
+            {
+                Text = "✅ OK",
+                Left = 80,
+                Width = 180,
+                Top = 105,
+                Height = 40,
+                DialogResult = DialogResult.OK,
+                BackColor = Color.FromArgb(46, 204, 113),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            confirmation.FlatAppearance.BorderSize = 0;
 
             confirmation.Click += (sender, e) => { prompt.Close(); };
 
@@ -293,14 +399,19 @@ namespace LoyaltyManager
                     DatabaseHelper.AddPoints(currentUser.UserId, pointsEarned);
                 }
 
-                MessageBox.Show($"Успіх! Нараховано {pointsEarned} балів!", "Успіх",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    $"🎉 Покупка успішна!\n\n" +
+                    $"⭐ Нараховано {pointsEarned} балів!\n" +
+                    $"💰 Загальна сума: {totalPrice:F2} грн",
+                    "✅ Успіх",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
                 LoadData();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Помилка: " + ex.Message, "Помилка",
+                MessageBox.Show($"❌ Помилка: {ex.Message}", "Помилка",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
